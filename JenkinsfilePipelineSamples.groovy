@@ -434,36 +434,59 @@ pipeline {
       }
     }
       steps {
-        echo 'deploying the application...'
+        script { 
+          gv.deployApp
+        }
       }
     }
   }
 }
-//can merge the Jenkinsfile to make it available to master to substitute the cuurent one in master.
+//can merge the Jenkinsfile to make it available to master to substitute the current one in master.
 //**Scan Multibranch pipeline now**-->
 // this is like the parent branch for all the sub-pipeline indivisual branches for which the regular expression is going to build from
 //so of there are code changes in any of the branches it will pick this up
 // you can also, if you want to, build from a specific pipeline
 
------------------------------------
+--------------------------------------------
+//11. Using Shared Library with Jenkinsfile
+--------------------------------------------
+#!/usr/bin/env groovy
+// @Library('jenkins-shared-library')_ #if this line is not followed by the variable definition or def gv(), the _ at the end of the import denotes the separation/break and the start of the pipeline.
+@Library('jenkins-shared-library') //import the library defined in the global Jenkins configuration on the UI
+def gv() 
 pipeline { 
   agent any 
 
   stages { 
-    stage("build") {
+    stage("init") {
       steps { 
-        echo 'building the application...'
+        script { 
+          gv = load "script.groovy"
+        }
       }
     }
-  stage("test") {
+    stage("build jar") {
+      steps { 
+        script {
+          //gv.buildJar()
+          buildJar() //this will call the corresponding finction in the shared library
+        }
+      }
+    }
+  stage("build image") {
       steps {
-        echo 'testing the application...'
+        script {
+          //gv.buildImage()
+          buildImage()
+        }
+        
       }
     }
   stage("deploy") {
       steps {
         echo 'deploying the application...'
       }
+
     }
   }
 }

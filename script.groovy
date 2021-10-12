@@ -44,3 +44,12 @@ def deployApp() {
 }
 
 return this
+------------------------------------
+//11. shared library
+------------------------
+// this file can also be extracted to the Jenkins Shared Library
+def deployApp() {
+    echo "deploying the application..."
+}
+
+return this
