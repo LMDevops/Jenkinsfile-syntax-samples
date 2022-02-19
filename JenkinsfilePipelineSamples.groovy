@@ -219,6 +219,7 @@ pipeline {
 
     //string(name, defaultValue, description)
     string(name: 'VERSION', defaultValue: '', description:'version to deploy on prod')
+    choice(name: 'VERSION', choices: ['1.1.0', '1.1.1', '1.1.2', '1.1.3'], description: '')
 
     # alternatively:
 
